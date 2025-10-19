@@ -26,6 +26,9 @@
 [data-theme="dark"] .brand h1 {
   color: #ffffff;
 }
+  table th,table td{padding:8px;border-bottom:1px solid var(--gray);}
+table th{background:#7ebeff;color:var(--dongker);}
+  
 *{box-sizing:border-box;font-family:Inter,system-ui;}
 body{margin:0;background:var(--bg);color:var(--dongker);transition:background .3s,color .3s;}
 .app{max-width:1200px;margin:auto;padding:16px;}
@@ -59,6 +62,17 @@ button:hover{background:var(--gray);color:#625e5e;}
   grid-template-columns:1fr 1fr;
   gap:16px;
   align-items:start;
+}
+  #studentsTable th, 
+#studentsTable td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+#studentsTable select {
+  text-align: center;
+  display: block;
+  margin: auto;
 }
 @media(max-width:800px){
   .dashboard-grid{grid-template-columns:1fr;}
@@ -300,4 +314,5 @@ loadWaliKelas();loadStudents();loadAttendanceForDate(getDateGMT7());
 </script>
 </body>
 </html>
+
 
