@@ -82,6 +82,7 @@ button:hover{background:var(--gray);color:#625e5e;}
     <aside class="sidebar">
       <div class="nav-item active" data-page="dashboard">📊 Dashboard</div>
       <div class="nav-item" data-page="absen">📝 Absensi</div>
+      <div class="nav-item" id="menuEdit">✏️ Edit</div>
     </aside>
 
     <main class="content">
@@ -143,6 +144,8 @@ function getDateGMT7(d=new Date()){
   const dd=String(local.getDate()).padStart(2,'0');
   return `${yyyy}-${mm}-${dd}`;
 }
+
+// API per kelas
 const CLASS_API={
   "Kelas 1":"https://script.google.com/macros/s/AKfycbwPE1mmoLU0S7FwwFCJ0Q5kMWU-P7kIBnENmq7EzH6IvkhSRtJDBzGb1UzIkzfAFAgzqQ/exec",
   "Kelas 2":"https://script.google.com/macros/s/AKfycbyNqy7VxUHJBKtgpDpW0ABc1s8A8VY3iMhfZspxXrkAX0TQyM_MLVXtgvB-2R6k635d4A/exec",
@@ -151,20 +154,50 @@ const CLASS_API={
   "Kelas 5":"https://script.google.com/macros/s/AKfycbw93ApzsSBccOHGOpINgYZLmY-sONHbDdzRejPE_DV25k9CtyiDHkNqjO7b4NfgFMF-Cg/exec",
   "Kelas 6":"https://script.google.com/macros/s/AKfycbwP89RXgznibsHz4_rqVxQiNX3F8m2Z90U_AWvvy-TgUVU5EslhYQ3t8fRW_ijMJW4/exec"
 };
+
+// Sheet ID
+const SHEET_ID={
+  "Kelas 1":"1vaD3tAejkyUdx-7RaDj96BRD9m08V1vphX1x0j1ZISY",
+  "Kelas 2":"1o4xcISpztp52yzXs58G-H_CL5MZhmEwqX8Ypyeh1qgg", 
+  "Kelas 3":"1pkVsEG1kOsMeznf-7nzDn6BbFK85j8mFojEL10g5yM4",
+  "Kelas 4":"170flmzqtxEBmtQYwbaaSnMtGyNFxMubwUJVUw1zMPDA",
+  "Kelas 5":"1Vmd_hzuhL_LFypcyI-eBIpXUZ1lZzL9_OysYDS0PkoE",
+  "Kelas 6":"1kBAUVHlP98RAUyuP0M5Na07RTYy-CaLM_xdTGvJTpZM"
+};
+
 let CURRENT_CLASS="Kelas 1";
 
 const pages={dashboard:document.getElementById("page-dashboard"),absen:document.getElementById("page-absen")};
-document.querySelectorAll(".nav-item").forEach(n=>{
+document.querySelectorAll(".nav-item[data-page]").forEach(n=>{
   n.onclick=()=>{Object.keys(pages).forEach(p=>pages[p].style.display=(p===n.dataset.page?"block":"none"));
-  document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active",x===n));};
+  document.querySelectorAll(".nav-item[data-page]").forEach(x=>x.classList.toggle("active",x===n));};
 });
+
+// Menu Edit
+document.getElementById("menuEdit").onclick=()=>{
+  const sheetId=SHEET_ID[CURRENT_CLASS];
+  if(sheetId){
+    const url=`https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
+    window.open(url,"_blank");
+  }else{
+    alert("Sheet ID untuk "+CURRENT_CLASS+" belum diatur.");
+  }
+};
+
 const darkToggle=document.getElementById("darkToggle");
 if(localStorage.getItem("theme")==="dark"){document.documentElement.setAttribute("data-theme","dark");darkToggle.classList.add("on");}
 darkToggle.onclick=()=>{
   const dark=document.documentElement.getAttribute("data-theme")==="dark";
   if(dark){document.documentElement.removeAttribute("data-theme");localStorage.setItem("theme","light");darkToggle.classList.remove("on");}
   else{document.documentElement.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");darkToggle.classList.add("on");}
+
+  // update warna teks pada grafik
+  if(statsChartInstance){
+    statsChartInstance.options.plugins.legend.labels.color = dark ? "#000000" : "#ffffff";
+    statsChartInstance.update();
+  }
 };
+
 document.getElementById("copyrightYear").textContent=new Date().getFullYear();
 
 async function apiGet(params){
@@ -225,9 +258,7 @@ function renderStatsChart(stats){
           datasets:[{data:[stats.Hadir||0,stats.Izin||0,stats.Alpha||0],
                      backgroundColor:["#0b5ed7","#facc15","#ef4444"],
                      borderWidth:0}]},
-    options:{plugins:{legend:{position:"bottom",labels:{
-    color: "black"
-}}},cutout:"70%",responsive:true}
+     options:{plugins:{legend:{position:"bottom",labels:{color: document.documentElement.getAttribute("data-theme")==="dark" ? "#ffffff" : "#000000"}}},cutout:"70%",responsive:true}
   });
 }
 document.getElementById("kelasSelect").onchange=async e=>{
