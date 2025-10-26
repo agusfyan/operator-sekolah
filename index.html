@@ -7,6 +7,10 @@
 <link rel="icon" href="https://iili.io/FSNupqu.png" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Tambahkan ini di bagian <head> sebelum script utama -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
 <style>
 :root {
   --bg:#f5f7fb; --card:#fff; --muted:#0055ff;
@@ -74,6 +78,121 @@ button:hover{background:var(--gray);color:#625e5e;}
   display: block;
   margin: auto;
 }
+/*==popu pdf==*/
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.45);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn .3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+.modal-content {
+  background: var(--card);
+  padding: 24px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  color: var(--dongker);
+}
+[data-theme="dark"] .modal-content { color: #000; }
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+/* Baris input */
+.modal-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.modal-row label {
+  font-weight: 600;
+  font-size: 14px;
+}
+.modal-row select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--gray);
+  background: #fff;
+  color: #000;
+  min-width: 120px;
+  transition: all 0.2s ease;
+}
+.modal-row select:hover {
+  border-color: var(--dongker);
+  box-shadow: 0 0 5px rgba(0,0,0,0.15);
+}
+[data-theme="dark"] .modal-row select {
+  background: #444;
+  color: #fff;
+}
+
+/* Tombol */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.modal-buttons button {
+  flex: 1;
+  padding: 8px 0;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.modal-buttons button:first-child {
+  background: #ccc;
+  color: #000;
+}
+.modal-buttons button:first-child:hover {
+  background: #d5fe04;
+}
+.modal-buttons button:last-child {
+  background: var(--dongker);
+  color: #fff;
+}
+.modal-buttons button:last-child:hover {
+  background: #d5fe04;
+  color: #000;
+}
+/* Responsif untuk layar kecil */
+@media (max-width: 480px) {
+  .modal-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .modal-row select {
+    width: 100%;
+  }
+  .modal-buttons {
+    flex-direction: column;
+  }
+  .modal-buttons button {
+    width: 100%;
+  }
+}
+
 @media(max-width:800px){
   .dashboard-grid{grid-template-columns:1fr;}
 }
@@ -97,6 +216,7 @@ button:hover{background:var(--gray);color:#625e5e;}
       <div class="nav-item active" data-page="dashboard">📊 Dashboard</div>
       <div class="nav-item" data-page="absen">📝 Absensi</div>
       <div class="nav-item" id="menuEdit">✏️ Edit</div>
+      <div class="nav-item" id="menuExport">📄 Export PDF</div>
     </aside>
 
     <main class="content">
@@ -147,6 +267,39 @@ button:hover{background:var(--gray);color:#625e5e;}
   </div>
 
   <footer>© <span id="copyrightYear"></span> UPTD SD Negeri 2 Tanjung Qencono</footer>
+</div>
+
+<!-- ==== POPUP EXPORT PDF ==== -->
+<div id="exportModal" class="modal">
+  <div class="modal-content">
+    <h3>Export Data Absensi</h3>
+
+    <div class="modal-row">
+      <label>Bulan:</label>
+      <select id="bulanSelect">
+        <option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option>
+        <option value="04">April</option><option value="05">Mei</option><option value="06">Juni</option>
+        <option value="07">Juli</option><option value="08">Agustus</option><option value="09">September</option>
+        <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+      </select>
+
+      <label>Tahun:</label>
+      <select id="tahunSelect"></select>
+    </div>
+
+    <div class="modal-row">
+      <label>Ukuran Kertas:</label>
+      <select id="paperSize">
+        <option value="a4">A4</option>
+        <option value="f4">F4</option>
+      </select>
+    </div>
+
+    <div class="modal-buttons">
+      <button onclick="closeModal()">❌ Batal</button>
+      <button id="exportBtn">✅ Lanjutkan</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -308,11 +461,60 @@ document.getElementById("submitAttendance").onclick = async () => {
     alert("Sudah absen hari ini, coba lagi besok");
   }
 };
+/* ==== Tambahan untuk Export PDF ==== */
+const modal = document.getElementById("exportModal");
+document.getElementById("menuExport").onclick = () => {
+  const yearSelect = document.getElementById("tahunSelect");
+  yearSelect.innerHTML = "";
+  const currentYear = new Date().getFullYear();
+  for (let y = currentYear; y >= currentYear - 5; y--) {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = y;
+    yearSelect.appendChild(opt);
+  }
+  modal.style.display = "flex";
+};
+function closeModal(){ modal.style.display = "none"; }
+
+// ketika klik lanjutkan export
+document.getElementById("exportBtn").onclick = async () => {
+  const bulan = document.getElementById("bulanSelect").value;
+  const tahun = document.getElementById("tahunSelect").value;
+  const ukuran = document.getElementById("paperSize").value;
+  modal.style.display = "none";
+  
+  const since = `${tahun}-${bulan}-01`;
+  const to = `${tahun}-${bulan}-31`;
+  const data = await apiGet({action:"getattendance",since,to});
+
+  if(!data || data.length===0){ alert("Tidak ada data absensi untuk periode ini."); return; }
+
+  // generate PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:"portrait", unit:"mm", format: ukuran==="f4" ? [210,330] : "a4" });
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(12);
+  doc.text(`Data Absensi Siswa ${CURRENT_CLASS}`, 14, 15);
+  doc.text(`Periode: ${bulan}/${tahun}`, 14, 22);
+
+  const rows = data.map(r=>[r.Nama, r.NISN, r.Tanggal, r.Status]);
+  doc.autoTable({
+    head:[["Nama","NISN","Tanggal","Status"]],
+    body:rows,
+    startY:28,
+    theme:"grid",
+    styles:{font:"helvetica",fontSize:11,cellPadding:3,halign:"center"},
+    headStyles:{fillColor:[126,190,255],textColor:0,halign:"center"}
+  });
+
+  doc.save(`Absensi_${CURRENT_CLASS}_${bulan}-${tahun}.pdf`);
+};
 
 document.getElementById("filterDate").value=getDateGMT7();
 loadWaliKelas();loadStudents();loadAttendanceForDate(getDateGMT7());
 </script>
 </body>
 </html>
-
 
