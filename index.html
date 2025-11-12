@@ -1411,6 +1411,47 @@
 
       tableHTML += "</tbody></table>";
       agendaNotesDiv.innerHTML = tableHTML;
+      function showToast(message, type = "info") {
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        // ================== NOTIFIKASI DELETE ==================
+        Object.assign(toast.style, {
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          minWidth: "200px",
+          maxWidth: "90%",
+          padding: "12px 18px",
+          background: type === "success" ? "#0a2e57" :
+            type === "error" ? "#e53935" : "#fbc02d",
+          color: type === "info" ? "#000" : "#fff",
+          fontWeight: "600",
+          textAlign: "center",
+          borderRadius: "8px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+          zIndex: "9999",
+          opacity: "0",
+          transition: "opacity 0.3s ease, transform 0.3s ease",
+        });
+
+        // Animasi muncul
+        requestAnimationFrame(() => {
+          toast.style.opacity = "1";
+          toast.style.transform = "translate(-50%, -50%) scale(1)";
+        });
+
+        // Hilangkan toast otomatis setelah 2,5 detik
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          toast.style.transform = "translate(-50%, -50%) scale(0.95)";
+          setTimeout(() => toast.remove(), 300);
+        }, 2500);
+      }
 
       // === EVENT HANDLER TOMBOL ===
       agendaNotesDiv.querySelectorAll(".icon-btn").forEach(btn => {
@@ -1437,14 +1478,15 @@
               );
 
               if (res && res.success) {
-                showToast(`Agenda tanggal ${date} berhasil dihapus!`);
+                // gunakan showToast yang sama dengan notif "terkirim"
+                showToast(`Agenda tanggal ${date} berhasil dihapus!`, "success");
                 await loadAgenda(`${year}-${String(month + 1).padStart(2, '0')}-01`);
               } else {
-                showToast("❌ Gagal menghapus agenda.");
+                showToast("❌ Gagal menghapus agenda.", "error");
               }
             } catch (err) {
               console.error(err);
-              showToast("⚠️ Terjadi kesalahan saat menghapus agenda.");
+              showToast("⚠️ Terjadi kesalahan saat menghapus agenda.", "error");
             }
           }
         });
@@ -1812,6 +1854,44 @@
       } catch (e) {
         kegiatanBody.innerHTML = `<tr><td colspan="5" class="center">Gagal memuat: ${e.message}</td></tr>`;
       }
+    }
+    // ================== NOTIFIKASI DELETE ==================
+    function showToast(message, type = "info") {
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      Object.assign(toast.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        minWidth: "200px",
+        maxWidth: "90%",
+        padding: "12px 18px",
+        background: type === "success" ? "#0a2e57" :
+          type === "error" ? "#e53935" : "#fbc02d",
+        color: type === "info" ? "#000" : "#fff",
+        fontWeight: "600",
+        textAlign: "center",
+        borderRadius: "8px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+        zIndex: "9999",
+        opacity: "0",
+        transition: "opacity 0.3s ease, transform 0.3s ease",
+      });
+
+      requestAnimationFrame(() => {
+        toast.style.opacity = "1";
+        toast.style.transform = "translate(-50%, -50%) scale(1)";
+      });
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translate(-50%, -50%) scale(0.95)";
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
     }
 
     // ================== EDIT / DELETE ==================
