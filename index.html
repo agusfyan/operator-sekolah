@@ -905,29 +905,31 @@
 
   <!-- Modal: Kegiatan Sekolah (Tambah/Edit) -->
   <div id="kegiatanModal" class="modal" aria-hidden="true">
-    <div class="modal-content" style="background:linear-gradient(145deg,#ffffff,#e6f0ff);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+    <div class="modal-content"
+      style="background:linear-gradient(145deg,#ffffff,#e6f0ff); text-align:center; max-width:400px; width:90%;">
+      <div style="margin-bottom:12px;">
         <h3 id="kegiatanModalTitle">➕ Tambah Kegiatan</h3>
       </div>
 
-      <div class="modal-row" style="flex-direction:column; align-items:stretch; gap:10px;">
-        <label>Tanggal</label>
-        <input id="kegiatanDate" type="date" />
+      <div class="modal-row" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+        <label style="width:90%; text-align:left;">Tanggal</label>
+        <input id="kegiatanDate" type="date" style="width:90%; text-align:center;" />
 
-        <label>Isi Kegiatan</label>
-        <textarea id="kegiatanText" rows="4" placeholder="Deskripsi kegiatan..." style="resize:none;"></textarea>
+        <label style="width:90%; text-align:left;">Isi Kegiatan</label>
+        <textarea id="kegiatanText" rows="4" placeholder="Deskripsi kegiatan..."
+          style="width:90%; resize:none; text-align:left;"></textarea>
 
-        <label>Status</label>
-        <select id="kegiatanStatus">
+        <label style="width:90%; text-align:left;">Status</label>
+        <select id="kegiatanStatus" style="width:90%; text-align:center;">
           <option value="Dalam Proses">Dalam Proses</option>
           <option value="Selesai">Selesai</option>
         </select>
 
-        <label>Catatan (opsional)</label>
-        <input id="kegiatanNote" type="text" placeholder="Catatan..." />
+        <label style="width:90%; text-align:left;">Catatan (opsional)</label>
+        <input id="kegiatanNote" type="text" placeholder="Catatan..." style="width:90%; text-align:left;" />
       </div>
 
-      <div class="modal-buttons">
+      <div class="modal-buttons" style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
         <button id="kegiatanCancel">Batal</button>
         <button id="kegiatanSave">Kirim</button>
       </div>
