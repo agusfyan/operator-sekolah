@@ -1,520 +1,1848 @@
 <!doctype html>
 <html lang="id">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>UPTD SD Negeri 2 Tanjung Qencono</title>
-<link rel="icon" href="https://iili.io/FSNupqu.png" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UPTD SD Negeri 2 Tanjung Qencono</title>
+  <link rel="icon" href="https://iili.io/FSNupqu.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
-<style>
-:root {
-  --bg:#f5f7fb; --card:#fff; --muted:#0055ff;
-  --accent:#0b5ed7; --accent-2:#2b6ea3;
-  --gray:#d5fe04; --shadow: 0 6px 16px rgba(0,0,0,0.2);
-  --gold:#04ff71; --dongker:#1e3a8a;
-}
-[data-theme="dark"] {
-  --bg:#0b1220; --card:#848484; --muted:#006aff;
-  --accent:#d5fe04; --accent-2:#d5fe04; --gray:#d5fe04;
-}
-/* Default warna teks Operator Sekolah */
-.brand h1 {
-  color: var(--dongker);
-}
-/* Saat dark mode aktif */
-[data-theme="dark"] .brand h1 {
-  color: #ffffff;
-}
-  table th,table td{padding:8px;border-bottom:1px solid var(--gray);}
-table th{background:#7ebeff;color:var(--dongker);}
-  
-*{box-sizing:border-box;font-family:Inter,system-ui;}
-body{margin:0;background:var(--bg);color:var(--dongker);transition:background .3s,color .3s;}
-.app{max-width:1200px;margin:auto;padding:16px;}
-.header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
-.brand{display:flex;gap:10px;align-items:center;flex:1;}
-.logo{width:52px;height:52px;border-radius:12px;background:#fff;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;}
-.logo img{width:100%;height:100%;object-fit:contain;}
-h1{margin:0;font-size:20px;font-weight:700;}
-p.lead{margin:0;color:var(--muted);font-size:13px;}
-.layout{display:grid;grid-template-columns:240px 1fr;gap:16px;}
-@media(max-width:900px){.layout{grid-template-columns:1fr;}}
-.sidebar{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;color:var(--muted);cursor:pointer;transition:.2s;font-size:14px;}
-.nav-item:hover{background:var(--gray);color:var(--muted);}
-.nav-item.active{background:linear-gradient(90deg,rgba(11,94,215,0.1),rgba(43,110,163,0.05));color:var(--accent);font-weight:600;}
-.card{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);}
-footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px;}
-.switch{width:44px;height:24px;background:#d5fe04;border-radius:999px;position:relative;cursor:pointer;}
-.switch .knob{position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#000000;transition:all .2s;}
-.switch.on{background:linear-gradient(90deg,var(--accent),var(--accent-2));}
-.switch.on .knob{left:23px;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-table th,table td{padding:8px;border-bottom:1px solid var(--gray);}
-table th{background:#7ebeff;color:var(--dongker);}
-.center{text-align:center;}
-input,select{padding:6px;border-radius:6px;border:1px solid var(--gray);}
-button{padding:6px 12px;border-radius:6px;border:none;background:var(--dongker);color:#fff;cursor:pointer;transition:0.2s;}
-button:hover{background:var(--gray);color:#625e5e;}
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-  align-items:start;
-}
-  #studentsTable th, 
-#studentsTable td {
-  text-align: center;
-  vertical-align: middle;
-}
-
-#studentsTable select {
-  text-align: center;
-  display: block;
-  margin: auto;
-}
-/*==popu pdf==*/
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.45);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn .3s ease;
-}
-@keyframes fadeIn {
-  from { opacity: 0; } to { opacity: 1; }
-}
-
-.modal-content {
-  background: var(--card);
-  padding: 24px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 420px;
-  box-shadow: var(--shadow);
-  text-align: center;
-  color: var(--dongker);
-}
-[data-theme="dark"] .modal-content { color: #000; }
-
-.modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #000;
-}
-
-/* Baris input */
-.modal-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-.modal-row label {
-  font-weight: 600;
-  font-size: 14px;
-}
-.modal-row select {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid var(--gray);
-  background: #fff;
-  color: #000;
-  min-width: 120px;
-  transition: all 0.2s ease;
-}
-.modal-row select:hover {
-  border-color: var(--dongker);
-  box-shadow: 0 0 5px rgba(0,0,0,0.15);
-}
-[data-theme="dark"] .modal-row select {
-  background: #444;
-  color: #fff;
-}
-
-/* Tombol */
-.modal-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-.modal-buttons button {
-  flex: 1;
-  padding: 8px 0;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.modal-buttons button:first-child {
-  background: #ccc;
-  color: #000;
-}
-.modal-buttons button:first-child:hover {
-  background: #d5fe04;
-}
-.modal-buttons button:last-child {
-  background: var(--dongker);
-  color: #fff;
-}
-.modal-buttons button:last-child:hover {
-  background: #d5fe04;
-  color: #000;
-}
-/* Responsif untuk layar kecil */
-@media (max-width: 480px) {
-  .modal-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .modal-row select {
-    width: 100%;
-  }
-  .modal-buttons {
-    flex-direction: column;
-  }
-  .modal-buttons button {
-    width: 100%;
-  }
-}
-
-@media(max-width:800px){
-  .dashboard-grid{grid-template-columns:1fr;}
-}
-</style>
-</head>
-<body>
-<div class="app">
-  <div class="header">
-    <div class="brand">
-      <div class="logo"><img src="https://iili.io/FSNupqu.png" alt="Logo SDN 2 Tanjung Qencono"></div>
-      <div>
-        <h1>Operator Sekolah</h1>
-        <p class="lead">UPTD SD Negeri 2 Tanjung Qencono</p>
-      </div>
-    </div>
-    <div id="darkToggle" class="switch" title="Dark Mode"><div class="knob"></div></div>
-  </div>
-
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="nav-item active" data-page="dashboard">📊 Dashboard</div>
-      <div class="nav-item" data-page="absen">📝 Absensi</div>
-      <div class="nav-item" id="menuEdit">✏️ Edit</div>
-      <div class="nav-item" id="menuExport">📄 Export PDF</div>
-    </aside>
-
-    <main class="content">
-      <!-- DASHBOARD -->
-      <section id="page-dashboard" class="card">
-        <h2>📈 Rekap Kehadiran Siswa</h2>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label>Pilih Kelas:
-            <select id="kelasSelect">
-              <option>Kelas 1</option><option>Kelas 2</option><option>Kelas 3</option>
-              <option>Kelas 4</option><option>Kelas 5</option><option>Kelas 6</option>
-            </select>
-          </label>
-          <label>Filter Tanggal:
-            <input type="date" id="filterDate">
-          </label>
-          <button id="refreshDashboard">🔄 Refresh</button>
-        </div>
-        <p id="waliKelasName">Wali Kelas: -</p>
-
-        <div class="dashboard-grid">
-          <div class="card">
-            <canvas id="statsChart" height="250"></canvas>
-          </div>
-          <div class="card" style="overflow:auto;max-height:433px;">
-            <table>
-              <thead><tr><th>Nama</th><th>NISN</th><th>Status</th><th>Tanggal</th></tr></thead>
-              <tbody id="attendanceTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ABSENSI -->
-      <section id="page-absen" class="card" style="display:none">
-        <h2>📝 Absensi Siswa</h2>
-        <p id="waliKelasName2">Wali Kelas: -</p>
-        <table id="studentsTable">
-          <thead><tr><th>Nama</th><th>NISN</th><th>Status</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-          <button id="markAllPresent">✅ Hadir Semua</button>
-          <button id="submitAttendance">📤 Kirim Absensi</button>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <footer>© <span id="copyrightYear"></span> UPTD SD Negeri 2 Tanjung Qencono</footer>
-</div>
-
-<!-- ==== POPUP EXPORT PDF ==== -->
-<div id="exportModal" class="modal">
-  <div class="modal-content">
-    <h3>Export Data Absensi</h3>
-
-    <div class="modal-row">
-      <label>Bulan:</label>
-      <select id="bulanSelect">
-        <option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option>
-        <option value="04">April</option><option value="05">Mei</option><option value="06">Juni</option>
-        <option value="07">Juli</option><option value="08">Agustus</option><option value="09">September</option>
-        <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
-      </select>
-
-      <label>Tahun:</label>
-      <select id="tahunSelect"></select>
-    </div>
-
-    <div class="modal-row">
-      <label>Ukuran Kertas:</label>
-      <select id="paperSize">
-        <option value="a4">A4</option>
-        <option value="f4">F4</option>
-      </select>
-    </div>
-
-    <div class="modal-buttons">
-      <button onclick="closeModal()">❌ Batal</button>
-      <button id="exportBtn">✅ Lanjutkan</button>
-    </div>
-  </div>
-</div>
-
-<script>
-function getDateGMT7(d=new Date()){
-  const tzOffset=7*60;
-  const local=new Date(d.getTime()+(tzOffset+d.getTimezoneOffset())*60000);
-  const yyyy=local.getFullYear();
-  const mm=String(local.getMonth()+1).padStart(2,'0');
-  const dd=String(local.getDate()).padStart(2,'0');
-  return `${yyyy}-${mm}-${dd}`;
-}
-
-// API per kelas
-const CLASS_API={
-  "Kelas 1":"https://script.google.com/macros/s/AKfycbwPE1mmoLU0S7FwwFCJ0Q5kMWU-P7kIBnENmq7EzH6IvkhSRtJDBzGb1UzIkzfAFAgzqQ/exec",
-  "Kelas 2":"https://script.google.com/macros/s/AKfycbyNqy7VxUHJBKtgpDpW0ABc1s8A8VY3iMhfZspxXrkAX0TQyM_MLVXtgvB-2R6k635d4A/exec",
-  "Kelas 3":"https://script.google.com/macros/s/AKfycbwQy1zoccq_1yCJsbS3DdzMoAyatN_XBocddQ7HWCBEXN-CLjEXbGlX61mNA7MUeirIUw/exec",
-  "Kelas 4":"https://script.google.com/macros/s/AKfycbxUCADnTYb5MTqM6bqu13fzkPLaAqDIkOvPLKZ3Esz2U1jL1nGjvSytXY4Gftqs_N76/exec",
-  "Kelas 5":"https://script.google.com/macros/s/AKfycbw93ApzsSBccOHGOpINgYZLmY-sONHbDdzRejPE_DV25k9CtyiDHkNqjO7b4NfgFMF-Cg/exec",
-  "Kelas 6":"https://script.google.com/macros/s/AKfycbwP89RXgznibsHz4_rqVxQiNX3F8m2Z90U_AWvvy-TgUVU5EslhYQ3t8fRW_ijMJW4/exec"
-};
-
-// Sheet ID
-const SHEET_ID={
-  "Kelas 1":"1vaD3tAejkyUdx-7RaDj96BRD9m08V1vphX1x0j1ZISY",
-  "Kelas 2":"1o4xcISpztp52yzXs58G-H_CL5MZhmEwqX8Ypyeh1qgg", 
-  "Kelas 3":"1pkVsEG1kOsMeznf-7nzDn6BbFK85j8mFojEL10g5yM4",
-  "Kelas 4":"170flmzqtxEBmtQYwbaaSnMtGyNFxMubwUJVUw1zMPDA",
-  "Kelas 5":"1Vmd_hzuhL_LFypcyI-eBIpXUZ1lZzL9_OysYDS0PkoE",
-  "Kelas 6":"1kBAUVHlP98RAUyuP0M5Na07RTYy-CaLM_xdTGvJTpZM"
-};
-
-let CURRENT_CLASS="Kelas 1";
-
-const pages={dashboard:document.getElementById("page-dashboard"),absen:document.getElementById("page-absen")};
-document.querySelectorAll(".nav-item[data-page]").forEach(n=>{
-  n.onclick=()=>{Object.keys(pages).forEach(p=>pages[p].style.display=(p===n.dataset.page?"block":"none"));
-  document.querySelectorAll(".nav-item[data-page]").forEach(x=>x.classList.toggle("active",x===n));};
-});
-
-// Menu Edit
-document.getElementById("menuEdit").onclick=()=>{
-  const sheetId=SHEET_ID[CURRENT_CLASS];
-  if(sheetId){
-    const url=`https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
-    window.open(url,"_blank");
-  }else{
-    alert("Sheet ID untuk "+CURRENT_CLASS+" belum diatur.");
-  }
-};
-
-const darkToggle=document.getElementById("darkToggle");
-if(localStorage.getItem("theme")==="dark"){document.documentElement.setAttribute("data-theme","dark");darkToggle.classList.add("on");}
-darkToggle.onclick=()=>{
-  const dark=document.documentElement.getAttribute("data-theme")==="dark";
-  if(dark){document.documentElement.removeAttribute("data-theme");localStorage.setItem("theme","light");darkToggle.classList.remove("on");}
-  else{document.documentElement.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");darkToggle.classList.add("on");}
-
-  // update warna teks pada grafik
-  if(statsChartInstance){
-    statsChartInstance.options.plugins.legend.labels.color = dark ? "#000000" : "#ffffff";
-    statsChartInstance.update();
-  }
-};
-
-document.getElementById("copyrightYear").textContent=new Date().getFullYear();
-
-async function apiGet(params){
-  const url=CLASS_API[CURRENT_CLASS]+"?"+new URLSearchParams(params);
-  const res=await fetch(url); const text=await res.text();
-  try{return JSON.parse(text);}catch{return[];}
-}
-async function apiPost(params,body){
-  const url=CLASS_API[CURRENT_CLASS]+"?"+new URLSearchParams(params);
-  const form=new URLSearchParams(); form.append("payload",JSON.stringify(body));
-  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:form});
-  return res.json();
-}
-
-async function loadWaliKelas(){
-  try{const wali=await apiGet({action:"getwali"});
-    document.getElementById("waliKelasName").textContent="Wali Kelas: "+(wali.nama||"-");
-    document.getElementById("waliKelasName2").textContent="Wali Kelas: "+(wali.nama||"-");
-  }catch{}
-}
-async function loadStudents(){
-  const body=document.querySelector("#studentsTable tbody");
-  body.innerHTML="<tr><td colspan=3 class=center>Memuat...</td></tr>";
-  try{
-    const data=await apiGet({action:"getstudents"});
-    body.innerHTML="";
-    data.forEach(s=>{
-      const tr=document.createElement("tr");
-      tr.innerHTML=`<td>${s.Nama||""}</td><td>${s.NISN||""}</td><td><select><option>Hadir</option><option>Izin</option><option>Alpha</option></select></td>`;
-      body.appendChild(tr);
-    });
-  }catch(e){body.innerHTML=`<tr><td colspan=3 class=center>Gagal: ${e.message}</td></tr>`;}
-}
-async function loadAttendanceForDate(date){
-  const body=document.getElementById("attendanceTable");
-  body.innerHTML="<tr><td colspan=4 class=center>Memuat...</td></tr>";
-  try{
-    const data=await apiGet({action:"getattendance",since:date,to:date});
-    if(!data||data.length===0){body.innerHTML="<tr><td colspan=4 class=center>Tidak ada data</td></tr>";renderStatsChart({Hadir:0,Izin:0,Alpha:0});return;}
-    body.innerHTML="";
-    const stats={Hadir:0,Izin:0,Alpha:0};
-    data.forEach(r=>{
-      stats[r.Status]=(stats[r.Status]||0)+1;
-      const tr=document.createElement("tr");
-      tr.innerHTML=`<td>${r.Nama}</td><td>${r.NISN}</td><td>${r.Status}</td><td>${r.Tanggal}</td>`;
-      body.appendChild(tr);
-    });
-    renderStatsChart(stats);
-  }catch(e){body.innerHTML=`<tr><td colspan=4 class=center>Gagal: ${e.message}</td></tr>`;}
-}
-let statsChartInstance=null;
-function renderStatsChart(stats){
-  const ctx=document.getElementById("statsChart").getContext("2d");
-  if(statsChartInstance) statsChartInstance.destroy();
-  statsChartInstance=new Chart(ctx,{
-    type:"doughnut",
-    data:{labels:["Hadir","Izin","Alpha"],
-          datasets:[{data:[stats.Hadir||0,stats.Izin||0,stats.Alpha||0],
-                     backgroundColor:["#0b5ed7","#facc15","#ef4444"],
-                     borderWidth:0}]},
-     options:{plugins:{legend:{position:"bottom",labels:{color: document.documentElement.getAttribute("data-theme")==="dark" ? "#ffffff" : "#000000"}}},cutout:"70%",responsive:true}
-  });
-}
-document.getElementById("kelasSelect").onchange=async e=>{
-  CURRENT_CLASS=e.target.value;await loadWaliKelas();await loadStudents();await loadAttendanceForDate(document.getElementById("filterDate").value||getDateGMT7());
-};
-document.getElementById("refreshDashboard").onclick=()=>loadAttendanceForDate(document.getElementById("filterDate").value||getDateGMT7());
-document.getElementById("filterDate").onchange=()=>loadAttendanceForDate(document.getElementById("filterDate").value||getDateGMT7());
-document.getElementById("markAllPresent").onclick=()=>document.querySelectorAll("#studentsTable tbody select").forEach(s=>s.value="Hadir");
-document.getElementById("submitAttendance").onclick = async () => {
-  const entries = [];
-  document.querySelectorAll("#studentsTable tbody tr").forEach(tr => {
-    entries.push({
-      Nama: tr.cells[0].textContent,
-      NISN: tr.cells[1].textContent,
-      Status: tr.cells[2].querySelector("select").value,
-      Tanggal: getDateGMT7()
-    });
-  });
-
-  try {
-    const res = await apiPost({ action: "submitattendance" }, { entries });
-
-    if (res.alreadySubmitted) {
-      alert("Sudah absen hari ini, coba lagi besok");
-    } else if (res.written && res.written > 0) {
-      alert("Absensi berhasil dikirim");
-      await loadAttendanceForDate(getDateGMT7());
-    } else {
-      alert("Sudah absen hari ini, coba lagi besok");
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #fff;
+      --muted: #0055ff;
+      --accent: #0b5ed7;
+      --accent-2: #2b6ea3;
+      --gray: #d5fe04;
+      --shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      --gold: #04ff71;
+      --dongker: #1e3a8a;
     }
 
-  } catch (e) {
-    alert("Sudah absen hari ini, coba lagi besok");
-  }
-};
-/* ==== Tambahan untuk Export PDF ==== */
-const modal = document.getElementById("exportModal");
-document.getElementById("menuExport").onclick = () => {
-  const yearSelect = document.getElementById("tahunSelect");
-  yearSelect.innerHTML = "";
-  const currentYear = new Date().getFullYear();
-  for (let y = currentYear; y >= currentYear - 5; y--) {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y;
-    yearSelect.appendChild(opt);
-  }
-  modal.style.display = "flex";
-};
-function closeModal(){ modal.style.display = "none"; }
+    [data-theme="dark"] {
+      --bg: #0b1220;
+      --card: #848484;
+      --muted: #006aff;
+      --accent: #d5fe04;
+      --accent-2: #d5fe04;
+      --gray: #d5fe04;
+    }
 
-// ketika klik lanjutkan export
-document.getElementById("exportBtn").onclick = async () => {
-  const bulan = document.getElementById("bulanSelect").value;
-  const tahun = document.getElementById("tahunSelect").value;
-  const ukuran = document.getElementById("paperSize").value;
-  modal.style.display = "none";
-  
-  const since = `${tahun}-${bulan}-01`;
-  const to = `${tahun}-${bulan}-31`;
-  const data = await apiGet({action:"getattendance",since,to});
+    /* Default warna teks Operator Sekolah */
+    .brand h1 {
+      color: var(--dongker);
+    }
 
-  if(!data || data.length===0){ alert("Tidak ada data absensi untuk periode ini."); return; }
+    /* Saat dark mode aktif */
+    [data-theme="dark"] .brand h1 {
+      color: #ffffff;
+    }
 
-  // generate PDF
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation:"portrait", unit:"mm", format: ukuran==="f4" ? [210,330] : "a4" });
+    table th,
+    table td {
+      padding: 8px;
+      border-bottom: 1px solid var(--gray);
+    }
 
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(12);
-  doc.text(`Data Absensi Siswa ${CURRENT_CLASS}`, 14, 15);
-  doc.text(`Periode: ${bulan}/${tahun}`, 14, 22);
+    table th {
+      background: #7ebeff;
+      color: var(--dongker);
+    }
 
-  const rows = data.map(r=>[r.Nama, r.NISN, r.Tanggal, r.Status]);
-  doc.autoTable({
-    head:[["Nama","NISN","Tanggal","Status"]],
-    body:rows,
-    startY:28,
-    theme:"grid",
-    styles:{font:"helvetica",fontSize:11,cellPadding:3,halign:"center"},
-    headStyles:{fillColor:[126,190,255],textColor:0,halign:"center"}
-  });
+    * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui;
+    }
 
-  doc.save(`Absensi_${CURRENT_CLASS}_${bulan}-${tahun}.pdf`);
-};
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--dongker);
+      transition: background .3s, color .3s;
+    }
 
-document.getElementById("filterDate").value=getDateGMT7();
-loadWaliKelas();loadStudents();loadAttendanceForDate(getDateGMT7());
-</script>
+    .app {
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    p.lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width:900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sidebar {
+      background: var(--card);
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: .2s;
+      font-size: 14px;
+    }
+
+    .nav-item:hover {
+      background: var(--gray);
+      color: var(--muted);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(11, 94, 215, 0.1), rgba(43, 110, 163, 0.05));
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 24px;
+    }
+
+    .switch {
+      width: 44px;
+      height: 24px;
+      background: #d5fe04;
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .switch .knob {
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #000000;
+      transition: all .2s;
+    }
+
+    .switch.on {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .switch.on .knob {
+      left: 23px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table th,
+    table td {
+      padding: 8px;
+      border-bottom: 1px solid var(--gray);
+    }
+
+    table th {
+      background: #7ebeff;
+      color: var(--dongker);
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    input,
+    select {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid var(--gray);
+    }
+
+    button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background: var(--dongker);
+      color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: var(--gray);
+      color: #0b0b0b;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    /* Tabel utama: hover seluruh sel baris */
+    #studentsTable tbody tr:hover td,
+    #agendaTable tbody tr:hover td,
+    #kegiatanTable tbody tr:hover td {
+      background-color: #d5fe04;
+      transition: background-color 0.2s ease;
+    }
+
+    /* Text center & vertical middle */
+    #studentsTable th,
+    #studentsTable td,
+    #agendaTable th,
+    #agendaTable td,
+    #kegiatanTable th,
+    #kegiatanTable td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    /* Select di studentsTable tetap center */
+    #studentsTable select {
+      text-align: center;
+      display: block;
+      margin: auto;
+    }
+
+    /* Tombol icon konsisten */
+    .icon-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+    }
+
+    .icon-btn:hover {
+      background: #f0f0f0;
+    }
+
+    /* Popup PDF */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn .3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: var(--card);
+      padding: 24px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      color: var(--dongker);
+    }
+
+    [data-theme="dark"] .modal-content {
+      color: #000;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .modal-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .modal-row label {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .modal-row select {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--gray);
+      background: #fff;
+      color: #000;
+      min-width: 120px;
+      transition: all 0.2s ease;
+    }
+
+    .modal-row select:hover {
+      border-color: var(--dongker);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] .modal-row select {
+      background: #444;
+      color: #fff;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 8px 0;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .modal-buttons button:first-child {
+      background: #ccc;
+      color: #333;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease
+    }
+
+    .modal-buttons button:first-child:hover {
+      background: #d5fe04;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal-buttons button:last-child {
+      background: #0b5ed7;
+      color: #fff;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-buttons button:last-child:hover {
+      background: #d5fe04;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Agenda */
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .calendar .day,
+    .calendar .header {
+      padding: 8px;
+      text-align: center;
+      border-radius: 6px;
+    }
+
+    .calendar .header {
+      font-weight: 700;
+      background: var(--muted);
+      color: #fff;
+    }
+
+    .calendar .day {
+      background: var(--card);
+      cursor: pointer;
+      transition: 0.2s;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .calendar .day:hover {
+      background: var(--gray);
+      color: var(--dongker);
+    }
+
+    .calendar .today {
+      border: 2px solid var(--dongker);
+    }
+
+    @media(max-width:600px) {
+      .calendar .day {
+        min-height: 50px;
+        font-size: 12px;
+      }
+    }
+
+    .calendar .has-agenda {
+      background: #444;
+      color: #fff;
+    }
+
+    [data-theme="dark"] .calendar .has-agenda {
+      background: #ffffff;
+      color: #1e3a8a;
+    }
+
+    /* popup agenda */
+    #agendaCancel {
+      background: #0b5ed7;
+      color: #fff;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #agendaSend {
+      background: #0b5ed7;
+      color: #fff;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #agendaSendAll {
+      background: #06014d;
+      color: #fff;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    /* Hover animasi gradien / warna */
+    #agendaCancel:hover {
+      background: #d5fe04;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    #agendaSend:hover {
+      background: #d5fe04;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    #agendaSendAll:hover {
+      background: #d5fe04;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Focus input & textarea */
+    #agendaModal input:focus,
+    #agendaModal textarea:focus {
+      outline: none;
+      border-color: #0b5ed7;
+      box-shadow: 0 0 6px rgba(11, 94, 215, 0.4);
+    }
+
+    /* Responsive kecil */
+    @media(max-width:480px) {
+      .modal-content {
+        padding: 16px;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .modal-buttons button {
+        width: 100%;
+      }
+    }
+
+    @media(max-width:800px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width:480px) {
+      .modal-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .modal-row select {
+        width: 100%;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .modal-buttons button {
+        width: 100%;
+      }
+    }
+
+    /* === TABEL KEGIATAN SEKOLAH === */
+    /* kegiatan row selesai color */
+    .kegiatan-selesai {
+      background: rgba(255, 0, 0, 0.08);
+    }
+
+    /* action buttons */
+    .icon-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+    }
+
+    .icon-btn:hover {
+      background: #f0f0f0;
+    }
+
+    #kegiatanTable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    #kegiatanTable thead {
+      background: #0a2e57;
+      /* biru dongker */
+      color: #fff;
+    }
+
+    #kegiatanTable th,
+    #kegiatanTable td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    #kegiatanTable th.center,
+    #kegiatanTable td.center {
+      text-align: center;
+    }
+
+    /* efek hover: seluruh sel di baris berubah warna */
+    #kegiatanTable tbody tr:hover td {
+      background-color: #d5fe04;
+      transition: background-color 0.2s ease;
+    }
+
+    /* responsive tweaks */
+    @media(max-width:800px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* === TABEL AGENDA KELAS === */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 14px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .data-table thead {
+      background: #0a2e57;
+      /* biru dongker */
+      color: #fff;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    .data-table th.center,
+    .data-table td.center {
+      text-align: center;
+    }
+
+    .data-table tbody tr:hover {
+      background: #d5fe04;
+    }
+
+    /* === TOMBOL AKSI === */
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      margin: 0 4px;
+      transition: transform 0.15s ease, color 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.2);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 700px) {
+      .data-table thead {
+        display: none;
+      }
+
+      .data-table tr {
+        display: block;
+        margin-bottom: 10px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+
+      .data-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .data-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #0a2e57;
+      }
+
+      .data-table td:last-child {
+        border-bottom: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="brand">
+        <div class="logo"><img src="https://iili.io/FSNupqu.png" alt="Logo SDN 2 Tanjung Qencono"></div>
+        <div>
+          <h1>Operator Sekolah</h1>
+          <p class="lead">UPTD SD Negeri 2 Tanjung Qencono</p>
+        </div>
+      </div>
+      <div id="darkToggle" class="switch" title="Dark Mode">
+        <div class="knob"></div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="nav-item active" data-page="dashboard">📊 Dashboard</div>
+        <div class="nav-item" data-page="absen">📝 Absensi</div>
+        <div class="nav-item" id="menuEdit">✏️ Edit</div>
+        <div class="nav-item" id="menuExport">📄 Export PDF</div>
+        <div class="nav-item" data-page="agenda">📅 Agenda Kelas</div>
+        <div class="nav-item" data-page="kegiatan">📘 Kegiatan Sekolah</div>
+      </aside>
+
+      <main class="content">
+        <!-- DASHBOARD -->
+        <section id="page-dashboard" class="card">
+          <h2>📈 Rekap Kehadiran Siswa</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
+            <label>Pilih Kelas:
+              <select id="kelasSelect">
+                <option>Kelas 1</option>
+                <option>Kelas 2</option>
+                <option>Kelas 3</option>
+                <option>Kelas 4</option>
+                <option>Kelas 5</option>
+                <option>Kelas 6</option>
+              </select>
+            </label>
+            <label>Filter Tanggal:
+              <input type="date" id="filterDate">
+            </label>
+            <button id="refreshDashboard">🔄 Refresh</button>
+          </div>
+          <p id="waliKelasName">Wali Kelas: -</p>
+
+          <div class="dashboard-grid">
+            <div class="card">
+              <canvas id="statsChart" height="250"></canvas>
+            </div>
+            <div class="card" style="overflow:auto;max-height:433px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th>NISN</th>
+                    <th>Status</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
+                <tbody id="attendanceTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ABSENSI -->
+        <section id="page-absen" class="card" style="display:none">
+          <h2>📝 Absensi Siswa</h2>
+          <p id="waliKelasName2">Wali Kelas: -</p>
+          <table id="studentsTable">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>NISN</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button id="markAllPresent">✅ Hadir Semua</button>
+            <button id="submitAttendance">📤 Kirim Absensi</button>
+          </div>
+        </section>
+
+        <!-- AGENDA -->
+        <section id="page-agenda" class="card" style="display:none">
+          <h2>📅 Agenda Kelas</h2>
+          <p id="waliKelasName3">Wali Kelas: -</p>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
+            <div>
+              <select id="agendaMonth">
+                <option value="0">Januari</option>
+                <option value="1">Februari</option>
+                <option value="2">Maret</option>
+                <option value="3">April</option>
+                <option value="4">Mei</option>
+                <option value="5">Juni</option>
+                <option value="6">Juli</option>
+                <option value="7">Agustus</option>
+                <option value="8">September</option>
+                <option value="9">Oktober</option>
+                <option value="10">November</option>
+                <option value="11">Desember</option>
+              </select>
+              <select id="agendaYear"></select>
+            </div>
+          </div>
+
+          <div id="calendar" class="calendar"></div>
+          <div id="agendaNotes" style="margin-top:10px;font-size:13px;"></div>
+        </section>
+
+        <!-- KEGIATAN SEKOLAH -->
+        <section id="page-kegiatan" class="card" style="display:none">
+          <h2>📘 Kegiatan Sekolah</h2>
+          <div
+            style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+            <div>
+              <button id="btnTambahKegiatan">➕ Tambah Kegiatan</button>
+            </div>
+          </div>
+
+          <div class="card" style="overflow:auto;">
+            <table id="kegiatanTable">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Isi Kegiatan</th>
+                  <th>Status</th>
+                  <th>Catatan</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="kegiatanBody">
+                <tr>
+                  <td colspan="5" class="center">Memuat...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer>© <span id="copyrightYear"></span> UPTD SD Negeri 2 Tanjung Qencono</footer>
+  </div>
+
+  <!-- Modal: tambah agenda -->
+  <div id="agendaModal" class="modal" aria-hidden="true">
+    <div class="modal-content"
+      style="max-width:480px; width:90%; border-radius:16px; padding:24px; background:linear-gradient(145deg,#ffffff,#e6f0ff); box-shadow:0 12px 25px rgba(0,0,0,0.25);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="margin:0; font-size:20px; font-weight:700; color:#0b5ed7;">✏️ "Tambah/Edit Agenda"</h3>
+      </div>
+
+      <div class="modal-row" style="flex-direction:column; align-items:stretch; gap:12px;">
+        <label style="font-weight:600; color:#1e3a8a;">Tanggal</label>
+        <input id="agendaModalDate" readonly
+          style="padding:10px; border-radius:8px; border:1px solid #ccc; font-size:14px; background:#f9f9f9;" />
+
+        <label style="font-weight:600; color:#1e3a8a;">Isi Agenda</label>
+        <textarea id="agendaModalText" rows="5" placeholder="Tulis agenda di sini..."
+          style="padding:10px; border-radius:8px; border:1px solid #ccc; font-size:14px; resize:none;"></textarea>
+      </div>
+
+      <div class="modal-buttons">
+        <button id="agendaCancel">Batal</button>
+        <button id="agendaSendAll">Kirim ke Semua</button>
+        <button id="agendaSend">Kirim</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Kegiatan Sekolah (Tambah/Edit) -->
+  <div id="kegiatanModal" class="modal" aria-hidden="true">
+    <div class="modal-content" style="background:linear-gradient(145deg,#ffffff,#e6f0ff);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 id="kegiatanModalTitle">➕ Tambah Kegiatan</h3>
+      </div>
+
+      <div class="modal-row" style="flex-direction:column; align-items:stretch; gap:10px;">
+        <label>Tanggal</label>
+        <input id="kegiatanDate" type="date" />
+
+        <label>Isi Kegiatan</label>
+        <textarea id="kegiatanText" rows="4" placeholder="Deskripsi kegiatan..." style="resize:none;"></textarea>
+
+        <label>Status</label>
+        <select id="kegiatanStatus">
+          <option value="Dalam Proses">Dalam Proses</option>
+          <option value="Selesai">Selesai</option>
+        </select>
+
+        <label>Catatan (opsional)</label>
+        <input id="kegiatanNote" type="text" placeholder="Catatan..." />
+      </div>
+
+      <div class="modal-buttons">
+        <button id="kegiatanCancel">Batal</button>
+        <button id="kegiatanSave">Kirim</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==== POPUP EXPORT PDF ==== -->
+  <div id="exportModal" class="modal">
+    <div class="modal-content">
+      <h3>Export Data Absensi</h3>
+
+      <div class="modal-row">
+        <label>Bulan:</label>
+        <select id="bulanSelect">
+          <option value="01">Januari</option>
+          <option value="02">Februari</option>
+          <option value="03">Maret</option>
+          <option value="04">April</option>
+          <option value="05">Mei</option>
+          <option value="06">Juni</option>
+          <option value="07">Juli</option>
+          <option value="08">Agustus</option>
+          <option value="09">September</option>
+          <option value="10">Oktober</option>
+          <option value="11">November</option>
+          <option value="12">Desember</option>
+        </select>
+
+        <label>Tahun:</label>
+        <select id="tahunSelect"></select>
+      </div>
+
+      <div class="modal-row">
+        <label>Ukuran Kertas:</label>
+        <select id="paperSize">
+          <option value="a4">A4</option>
+          <option value="f4">F4</option>
+        </select>
+      </div>
+
+      <div class="modal-buttons">
+        <button onclick="closeModal()">❌ Batal</button>
+        <button id="exportBtn">✅ Lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Fungsi Utility ----------
+    function getDateGMT7(d = new Date()) {
+      const tzOffset = 7 * 60;
+      const local = new Date(d.getTime() + (tzOffset + d.getTimezoneOffset()) * 60000);
+      const yyyy = local.getFullYear();
+      const mm = String(local.getMonth() + 1).padStart(2, '0');
+      const dd = String(local.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+    document.getElementById("copyrightYear").textContent = new Date().getFullYear();
+
+    // kegiatan kelas
+    const KEGIATAN_API = "https://script.google.com/macros/s/AKfycbyp-tftji_oZ7WHk9aAoDX9ojoxAIEeabyi2LCE8KUFQJjGGTIM_aiCUBYGyWC6vGBiJw/exec";
+
+    // API per kelas
+    const CLASS_API = {
+      "Kelas 1": "https://script.google.com/macros/s/AKfycbxXJKIMZAM424hXfpkD_yi-G24CobRi1ivm5FmkgvM_XqtOc0hSjSycWucoLxLR3nmwVA/exec",
+      "Kelas 2": "https://script.google.com/macros/s/AKfycbx96xmEP9GYrWQCqQQvPQtO0BI2qYXYV1qVzlT6qJu-1Oenj1ixyR470pM95pqfucyfFg/exec",
+      "Kelas 3": "https://script.google.com/macros/s/AKfycbx7ZPgxxgXu4h59W4Js_CtaTYd-qdj6yomSyq2vcMQry0OaX0_rUDnnJvrfY3kf9LngIA/exec",
+      "Kelas 4": "https://script.google.com/macros/s/AKfycbz0ySx2GkL9i3w-lKo_rTcFO4x-bDEN0X_4o0WhOzSv7UnIdr8SO3ITnbbYPsJaY6ZJ/exec",
+      "Kelas 5": "https://script.google.com/macros/s/AKfycbyYttSK5Q7ly57bezKTV0wHJfg0BL08qbKLZ_H7D77-sqOr_Ue4w_aqq5FmHWeAiyYeBA/exec",
+      "Kelas 6": "https://script.google.com/macros/s/AKfycbwkuXTxvbhguSLlfVnfJ-sYrhNl-gJvrCyt14YT1M9JkO8rEkeKEMISh-EIgBxkVppx/exec"
+    };
+    const SHEET_ID = {
+      "Kelas 1": "1vaD3tAejkyUdx-7RaDj96BRD9m08V1vphX1x0j1ZISY",
+      "Kelas 2": "1o4xcISpztp52yzXs58G-H_CL5MZhmEwqX8Ypyeh1qgg",
+      "Kelas 3": "1pkVsEG1kOsMeznf-7nzDn6BbFK85j8mFojEL10g5yM4",
+      "Kelas 4": "170flmzqtxEBmtQYwbaaSnMtGyNFxMubwUJVUw1zMPDA",
+      "Kelas 5": "1Vmd_hzuhL_LFypcyI-eBIpXUZ1lZzL9_OysYDS0PkoE",
+      "Kelas 6": "1kBAUVHlP98RAUyuP0M5Na07RTYy-CaLM_xdTGvJTpZM"
+    };
+
+    // ---------- Variabel Global ----------
+    let CURRENT_CLASS = "Kelas 1";
+    let statsChartInstance = null;
+
+    const pages = {
+      dashboard: document.getElementById("page-dashboard"),
+      absen: document.getElementById("page-absen"),
+      agenda: document.getElementById("page-agenda"),
+      kegiatan: document.getElementById("page-kegiatan")
+    };
+
+    // ---------- Navigasi Sidebar ----------
+    document.querySelectorAll(".nav-item[data-page]").forEach(n => {
+      n.onclick = () => {
+        Object.keys(pages).forEach(p => pages[p].style.display = (p === n.dataset.page ? "block" : "none"));
+        document.querySelectorAll(".nav-item[data-page]").forEach(x => x.classList.toggle("active", x === n));
+      };
+    });
+
+    // Menu Edit
+    document.getElementById("menuEdit").onclick = () => {
+      const sheetId = SHEET_ID[CURRENT_CLASS];
+      if (sheetId) { window.open(`https://docs.google.com/spreadsheets/d/${sheetId}/edit`, "_blank"); }
+      else { alert("Sheet ID untuk " + CURRENT_CLASS + " belum diatur."); }
+    };
+
+    // Dark mode toggle
+    const darkToggle = document.getElementById("darkToggle");
+    if (localStorage.getItem("theme") === "dark") { document.documentElement.setAttribute("data-theme", "dark"); darkToggle.classList.add("on"); }
+    darkToggle.onclick = () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) { document.documentElement.removeAttribute("data-theme"); localStorage.setItem("theme", "light"); darkToggle.classList.remove("on"); }
+      else { document.documentElement.setAttribute("data-theme", "dark"); localStorage.setItem("theme", "dark"); darkToggle.classList.add("on"); }
+      if (statsChartInstance) {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        statsChartInstance.options.plugins.legend.labels.color = isDark ? "#ffffff" : "#000000";
+        statsChartInstance.update();
+      }
+    };
+
+    document.getElementById("copyrightYear").textContent = new Date().getFullYear();
+
+    // ---------- API Helper ----------
+    async function apiGet(params) {
+      const url = CLASS_API[CURRENT_CLASS] + "?" + new URLSearchParams(params);
+      const res = await fetch(url); const text = await res.text();
+      try { return JSON.parse(text); } catch { return []; }
+    }
+    async function apiPost(params, body) {
+      const url = CLASS_API[CURRENT_CLASS] + "?" + new URLSearchParams(params);
+      const form = new URLSearchParams(); form.append("payload", JSON.stringify(body));
+      const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: form });
+      return res.json();
+    }
+
+    // API helpers untuk Kegiatan Sekolah (gunakan KEGIATAN_API) 
+    async function kegiatanGet(params) {
+      if (!KEGIATAN_API) throw new Error("Ganti konstanta KEGIATAN_API dengan URL Web App Anda.");
+      const url = KEGIATAN_API + "?" + new URLSearchParams(params);
+      const res = await fetch(url);
+      const txt = await res.text();
+      try { return JSON.parse(txt); } catch (e) { return []; }
+    }
+    async function kegiatanPost(action, payload) {
+      if (!KEGIATAN_API) throw new Error("Ganti konstanta KEGIATAN_API dengan URL Web App Anda.");
+      const url = KEGIATAN_API + "?action=" + encodeURIComponent(action);
+      const form = new URLSearchParams(); form.append("payload", JSON.stringify(payload));
+      const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: form });
+      return res.json();
+    }
+
+    // ---------- Load Wali Kelas ----------
+    async function loadWaliKelas() {
+      // Kosongkan tampilan wali kelas dulu
+      const waliEls = [
+        document.getElementById("waliKelasName"),
+        document.getElementById("waliKelasName2"),
+        document.getElementById("waliKelasName3")
+      ];
+      waliEls.forEach(el => {
+        if (el) el.textContent = "Wali Kelas: ---";
+      });
+
+      try {
+        const wali = await apiGet({ action: "getwali", kelas: CURRENT_CLASS });
+        waliEls.forEach(el => {
+          if (el) el.textContent = "Wali Kelas: " + (wali.nama || "-");
+        });
+      } catch (e) {
+        console.error("Gagal memuat wali kelas:", e);
+        // tetap biarkan "---" jika error
+      }
+    }
+
+    loadWaliKelas();
+
+    // ---------- DASHBOARD CHART ----------
+    async function loadDashboard(date) {
+      const body = document.getElementById("attendanceTable");
+      body.innerHTML = "<tr><td colspan=4 class='center'>Memuat...</td></tr>";
+
+      // Reset chart sementara
+      renderStatsChart({ Hadir: 0, Izin: 0, Alpha: 0 });
+
+      try {
+        // Ambil data absensi
+        const data = await apiGet({ action: "getattendance", since: date, to: date });
+
+        // Jika tidak ada data
+        if (!data || data.length === 0) {
+          body.innerHTML = "<tr><td colspan=4 class='center'>Tidak ada data</td></tr>";
+          renderStatsChart({ Hadir: 0, Izin: 0, Alpha: 0 });
+          return;
+        }
+
+        // Kosongkan tabel
+        body.innerHTML = "";
+
+        // Hitung statistik
+        const stats = { Hadir: 0, Izin: 0, Alpha: 0 };
+
+        data.forEach(s => {
+          if (s.Status === "Hadir") stats.Hadir++;
+          else if (s.Status === "Izin") stats.Izin++;
+          else if (s.Status === "Alpha") stats.Alpha++;
+        });
+
+        body.innerHTML = data.map(s => `
+  <tr>
+    <td>${s.Nama}</td>
+    <td>${s.NISN || ""}</td>
+    <td class="center">${s.Status || ""}</td>
+    <td>${s.Tanggal || ""}</td>
+  </tr>
+`).join("");
+
+        // Tampilkan grafik statistik
+        renderStatsChart(stats);
+
+      } catch (e) {
+        body.innerHTML = `<tr><td colspan=4 class='center'>Gagal: ${e.message}</td></tr>`;
+      }
+    }
+
+    // ====== FUNGSI CHART ======
+    function renderStatsChart(stats) {
+      const ctx = document.getElementById("statsChart").getContext("2d");
+      if (statsChartInstance) {
+        statsChartInstance.data.datasets[0].data = [stats.Hadir || 0, stats.Izin || 0, stats.Alpha || 0];
+        statsChartInstance.update();
+        return;
+      }
+
+      statsChartInstance = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: ["Hadir", "Izin", "Alpha"],
+          datasets: [{
+            data: [stats.Hadir || 0, stats.Izin || 0, stats.Alpha || 0],
+            backgroundColor: ["#0b5ed7", "#facc15", "#ef4444"],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                color: document.documentElement.getAttribute("data-theme") === "dark" ? "#ffffff" : "#000000"
+              }
+            }
+          },
+          cutout: "70%",
+          responsive: true
+        }
+      });
+    }
+
+    document.getElementById("refreshDashboard").onclick = () => loadDashboard(document.getElementById("filterDate").value || getDateGMT7());
+    document.getElementById("kelasSelect").onchange = function () { CURRENT_CLASS = this.value; loadWaliKelas(); loadDashboard(getDateGMT7()); loadAgenda(getDateGMT7()); };
+    document.getElementById("filterDate").value = getDateGMT7();
+    loadDashboard(getDateGMT7());
+
+    // ---------- ABSENSI ----------
+    async function loadStudents() {
+      const tbody = document.querySelector("#studentsTable tbody"); tbody.innerHTML = "<tr><td colspan=3 class=center>Memuat...</td></tr>";
+      try {
+        const data = await apiGet({ action: "getstudents" });
+        tbody.innerHTML = "";
+        data.forEach(s => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${s.Nama}</td><td>${s.NISN || ""}</td>
+        <td><select><option value="Hadir">Hadir</option><option value="Izin">Izin</option><option value="Alpha">Alpha</option></select></td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (e) { tbody.innerHTML = `<tr><td colspan=3 class=center>Gagal: ${e.message}</td></tr>`; }
+    }
+    loadStudents();
+    document.getElementById("markAllPresent").onclick = () => {
+      document.querySelectorAll("#studentsTable select").forEach(sel => sel.value = "Hadir");
+    };
+    document.getElementById("submitAttendance").onclick = async () => {
+      const rows = document.querySelectorAll("#studentsTable tbody tr"); const payload = [];
+      rows.forEach(r => {
+        const nama = r.children[0].textContent;
+        const nis = r.children[1].textContent;
+        const status = r.children[2].querySelector("select").value;
+        payload.push({ Nama: nama, NISN: nis, Status: status, Tanggal: getDateGMT7() });
+      });
+      try {
+        const res = await apiPost({ action: "submitattendance" }, { entries: payload });
+
+        if (res.alreadySubmitted) {
+          alert("Sudah absen hari ini, coba lagi besok");
+        } else if (res.written && res.written > 0) {
+          alert("Absensi berhasil dikirim");
+          await loadDashboard(getDateGMT7());
+        } else {
+          alert("Sudah absen hari ini, coba lagi besok");
+        }
+
+      } catch (e) {
+        alert("Sudah absen hari ini, coba lagi besok");
+      }
+    };
+
+    // ====== AGENDA KELAS ======
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    const monthSelect = document.getElementById("agendaMonth");
+    const yearSelect = document.getElementById("agendaYear");
+    const calendarDiv = document.getElementById("calendar");
+    const agendaNotesDiv = document.getElementById("agendaNotes");
+
+    let currMonth = new Date().getMonth();
+    let currYear = new Date().getFullYear();
+    let agendas = [];
+
+    // Modal
+    const agendaModal = document.getElementById("agendaModal");
+    const agendaDateInput = document.getElementById("agendaModalDate");
+    const agendaTextInput = document.getElementById("agendaModalText");
+    const agendaCancelBtn = document.getElementById("agendaCancel");
+    const agendaSendBtn = document.getElementById("agendaSend");
+    const agendaSendAllBtn = document.getElementById("agendaSendAll");
+
+    // ==========================================
+    // Inisialisasi dropdown bulan & tahun
+    function initMonthYearControls() {
+      monthSelect.innerHTML = monthNames.map((m, i) => `<option value="${i}">${m}</option>`).join("");
+      const now = new Date().getFullYear();
+      yearSelect.innerHTML = "";
+      for (let y = now - 5; y <= now + 5; y++) {
+        const opt = document.createElement("option");
+        opt.value = y; opt.textContent = y;
+        yearSelect.appendChild(opt);
+      }
+      monthSelect.value = currMonth;
+      yearSelect.value = currYear;
+    }
+
+    // ==========================================
+    // Fungsi API GET/POST
+    async function apiGet(params = {}, urlBase = null) {
+      const url = (urlBase || CLASS_API[CURRENT_CLASS]) + "?" + new URLSearchParams(params);
+      const res = await fetch(url);
+      return res.json();
+    }
+
+    async function apiPost(params = {}, data = {}, urlBase = null) {
+      const url = (urlBase || CLASS_API[CURRENT_CLASS]) + "?" + new URLSearchParams(params);
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ payload: JSON.stringify(data) })
+      });
+      return res.json();
+    }
+
+    // Popup tambah/edit agenda
+    function openAgendaModal(dateStr, existing = null) {
+      const modalTitle = document.getElementById("agendaModalTitle");
+      if (modalTitle) {
+        modalTitle.textContent = existing ? "Edit Agenda" : "Tambah Agenda";
+      }
+
+      agendaDateInput.value = dateStr;
+      agendaTextInput.value = existing ? existing.Agenda || "" : "";
+      agendaModal.style.display = "flex";
+      agendaModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeAgendaModal() {
+      agendaModal.style.display = "none";
+      agendaModal.setAttribute("aria-hidden", "true");
+    }
+
+    // Tutup modal saat klik di luar
+    window.onclick = (e) => { if (e.target === agendaModal) closeAgendaModal(); };
+    agendaCancelBtn.addEventListener("click", (ev) => { ev.preventDefault(); closeAgendaModal(); });
+
+    // ==========================================
+    // Load agenda & render kalender + tabel
+    async function loadAgenda(dateStr) {
+      calendarDiv.innerHTML = "<div class='center'>Memuat...</div>";
+      const [year, month] = dateStr.split("-").map(Number);
+      currMonth = month - 1;
+      currYear = year;
+      monthSelect.value = currMonth;
+      yearSelect.value = currYear;
+
+      try {
+        let agendas = await apiGet({ action: "getagenda", year, month, kelas: CURRENT_CLASS });
+        if (!Array.isArray(agendas)) agendas = agendas.data || [];
+        renderCalendar(currMonth, currYear, agendas);
+        renderAgendaTable(currMonth, currYear, agendas);
+      } catch (e) {
+        calendarDiv.innerHTML = `<div class='center'>Gagal memuat agenda: ${e.message}</div>`;
+      }
+    }
+
+    // ==========================================
+    // Render kalender
+    function renderCalendar(month, year, agendas = []) {
+      calendarDiv.innerHTML = "";
+      const headers = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+      headers.forEach(h => {
+        const el = document.createElement("div");
+        el.className = "header";
+        el.textContent = h;
+        calendarDiv.appendChild(el);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const todayStr = getDateGMT7();
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day";
+        calendarDiv.appendChild(empty);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const dayEl = document.createElement("div");
+        dayEl.className = "day";
+        if (dateStr === todayStr) dayEl.classList.add("today");
+
+        const hasAgenda = agendas.find(a => a.Tanggal === dateStr);
+        if (hasAgenda) {
+          dayEl.classList.add("has-agenda");
+          dayEl.title = hasAgenda.Agenda;
+        }
+
+        dayEl.innerHTML = `<strong>${d}</strong>`;
+        dayEl.onclick = () => openAgendaModal(dateStr, hasAgenda || null);
+        calendarDiv.appendChild(dayEl);
+      }
+    }
+
+    // ==========================================
+    // Render tabel agenda dengan ikon edit/hapus
+    function renderAgendaTable(month, year, agendas = []) {
+      if (agendas.length === 0) {
+        agendaNotesDiv.innerHTML = "<div class='note'>Belum ada agenda bulan ini</div>";
+        return;
+      }
+
+      let tableHTML = `
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="center">Tanggal</th>
+          <th>Agenda</th>
+          <th class="center">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+      agendas.forEach(a => {
+        tableHTML += `
+      <tr data-date="${a.Tanggal}">
+        <td class="center">${a.Tanggal}</td>
+        <td>${a.Agenda || ""}</td>
+        <td class="center">
+          <button class="icon-btn" title="Edit" data-action="edit" data-date="${a.Tanggal}">✏️</button>
+          <button class="icon-btn" title="Hapus" data-action="delete" data-date="${a.Tanggal}">🗑️</button>
+        </td>
+      </tr>
+    `;
+      });
+      tableHTML += "</tbody></table>";
+      agendaNotesDiv.innerHTML = tableHTML;
+
+      // Event listener tombol edit/hapus
+      agendaNotesDiv.querySelectorAll(".icon-btn").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+          const date = e.target.dataset.date;
+          const action = e.target.dataset.action;
+
+          if (action === "edit") {
+            const item = agendas.find(x => x.Tanggal === date);
+            openAgendaModal(date, item);
+          }
+          else if (action === "delete") {
+            if (!confirm(`Yakin ingin menghapus agenda tanggal ${date}?`)) return;
+            try {
+              // Gunakan apiPost, bukan apiGet
+              const res = await apiPost(
+                { action: "deleteagenda" },
+                { Tanggal: date },
+                CLASS_API[CURRENT_CLASS]
+              );
+
+              if (res && res.success) {
+                alert("Agenda berhasil dihapus!");
+                await loadAgenda(`${currYear}-${String(currMonth + 1).padStart(2, '0')}-01`);
+              } else {
+                throw new Error(res.error || "Server tidak merespon");
+              }
+
+            } catch (err) {
+              alert("Gagal menghapus agenda: " + err.message);
+            }
+          }
+        });
+      });
+    }
+    function submitAgenda(payload) {
+      // expects { Tanggal: "yyyy-mm-dd", Agenda: "..." }
+      const tanggalStr = (payload && payload.Tanggal) ? payload.Tanggal.toString() : "";
+      const agendaText = (payload && payload.Agenda) ? payload.Agenda.toString() : "";
+      if (!tanggalStr || !agendaText) throw new Error("Missing tanggal atau agenda");
+
+      const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+      let sh = ss.getSheetByName(SHEET_AGENDA);
+      if (!sh) {
+        sh = ss.insertSheet(SHEET_AGENDA);
+        sh.appendRow(["Tanggal", "Agenda"]);
+      }
+
+      const values = sh.getDataRange().getValues();
+      const tz = ss.getSpreadsheetTimeZone() || Session.getScriptTimeZone() || "GMT";
+      let updated = false;
+
+      // Cari apakah tanggal sudah ada → kalau ya, update baris tersebut
+      for (let i = 1; i < values.length; i++) {
+        const cellDate = values[i][0];
+        const dateStr = formatDateCell(cellDate);
+        if (dateStr === tanggalStr) {
+          sh.getRange(i + 1, 2).setValue(agendaText); // kolom ke-2 = Agenda
+          updated = true;
+          break;
+        }
+      }
+
+      // Jika belum ada, tambahkan baris baru
+      if (!updated) {
+        let dateObj = new Date(tanggalStr + "T00:00:00");
+        if (isNaN(dateObj)) dateObj = new Date(tanggalStr);
+        sh.appendRow([dateObj, agendaText]);
+      }
+
+      // Sort sheet berdasarkan kolom tanggal
+      const lastRow = sh.getLastRow();
+      if (lastRow > 1) {
+        sh.getRange(2, 1, lastRow - 1, 2).sort({ column: 1, ascending: true });
+      }
+
+      return updated ? "updated" : "inserted";
+    }
+
+    // Tombol Kirim agenda
+    agendaSendBtn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      const tanggal = agendaDateInput.value;
+      const isi = agendaTextInput.value.trim();
+      if (!isi) return alert("Isi agenda tidak boleh kosong!");
+
+      agendaSendBtn.disabled = true;
+      const oldText = agendaSendBtn.textContent;
+      agendaSendBtn.textContent = "Mengirim...";
+
+      try {
+        const res = await apiPost({ action: "submitagenda" }, { Tanggal: tanggal, Agenda: isi });
+        if (res && res.success) {
+          await loadAgenda(`${currYear}-${String(currMonth + 1).padStart(2, '0')}-01`);
+          closeAgendaModal();
+          alert(`Agenda berhasil dikirim ke ${CURRENT_CLASS}`);
+        } else {
+          alert("Gagal mengirim agenda: " + (res.message || "Server tidak merespon"));
+        }
+      } catch (e) {
+        alert("Terjadi kesalahan: " + e.message);
+      } finally {
+        agendaSendBtn.disabled = false;
+        agendaSendBtn.textContent = oldText;
+      }
+    });
+
+    // Tombol Kirim Semua Kelas
+    agendaSendAllBtn.addEventListener("click", async () => {
+      const tanggal = agendaDateInput.value;
+      const isi = agendaTextInput.value.trim();
+      if (!isi) return alert("Isi agenda tidak boleh kosong!");
+
+      agendaSendAllBtn.disabled = true;
+      const oldText = agendaSendAllBtn.textContent;
+      agendaSendAllBtn.textContent = "Mengirim...";
+
+      try {
+        const kelasList = Object.keys(CLASS_API);
+        const promises = kelasList.map(kelas =>
+          fetch(CLASS_API[kelas] + "?action=submitagenda", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ payload: JSON.stringify({ Tanggal: tanggal, Agenda: isi }) })
+          }).then(r => r.json()).then(res => ({ kelas, success: res.success })).catch(err => ({ kelas, success: false, error: err }))
+        );
+        const results = await Promise.all(promises);
+        const successCount = results.filter(r => r.success).length;
+        alert(`Agenda berhasil dikirim ke ${successCount}/${kelasList.length} kelas`);
+        closeAgendaModal();
+        loadAgenda(getDateGMT7());
+      } catch (e) {
+        alert("Terjadi kesalahan saat mengirim agenda: " + e.message);
+      } finally {
+        agendaSendAllBtn.disabled = false;
+        agendaSendAllBtn.textContent = oldText;
+      }
+    });
+
+    // Inisialisasi awal
+    initMonthYearControls();
+    loadAgenda(getDateGMT7());
+
+    // ---------- EXPORT PDF ----------
+    const modal = document.getElementById("exportModal");
+    document.getElementById("menuExport").onclick = () => {
+      const yearSelect = document.getElementById("tahunSelect");
+      yearSelect.innerHTML = "";
+      const currentYear = new Date().getFullYear();
+      for (let y = currentYear; y >= currentYear - 5; y--) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        yearSelect.appendChild(opt);
+      }
+      modal.style.display = "flex";
+    };
+    function closeModal() { modal.style.display = "none"; }
+
+    // ketika klik lanjutkan export
+    document.getElementById("exportBtn").onclick = async () => {
+      const bulan = document.getElementById("bulanSelect").value;
+      const tahun = document.getElementById("tahunSelect").value;
+      const ukuran = document.getElementById("paperSize").value;
+      modal.style.display = "none";
+
+      const since = `${tahun}-${bulan}-01`;
+      const to = `${tahun}-${bulan}-31`;
+      const data = await apiGet({ action: "getattendance", since, to });
+
+      if (!data || data.length === 0) { alert("Tidak ada data absensi untuk periode ini."); return; }
+
+      // generate PDF
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: ukuran === "f4" ? [210, 330] : "a4" });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+      doc.text(`Data Absensi Siswa ${CURRENT_CLASS}`, 14, 15);
+      doc.text(`Periode: ${bulan}/${tahun}`, 14, 22);
+
+      const rows = data.map(r => [r.Nama, r.NISN, r.Tanggal, r.Status]);
+      doc.autoTable({
+        head: [["Nama", "NISN", "Tanggal", "Status"]],
+        body: rows,
+        startY: 28,
+        theme: "grid",
+        styles: { font: "helvetica", fontSize: 11, cellPadding: 3, halign: "center" },
+        headStyles: { fillColor: [126, 190, 255], textColor: 0, halign: "center" }
+      });
+
+      doc.save(`Absensi_${CURRENT_CLASS}_${bulan}-${tahun}.pdf`);
+    };
+    // === Klik di luar modal menutupnya ===
+    window.onclick = e => {
+      if (e.target.classList.contains("modal")) e.target.style.display = "none";
+    };
+
+    // ---------- Init ----------
+    initMonthYearControls();
+    document.getElementById("kelasSelect").onchange = async function () {
+      CURRENT_CLASS = this.value;
+      const dashboardDate = getDateGMT7();
+      await Promise.all([
+        loadWaliKelas(),
+        loadDashboard(dashboardDate),
+        loadStudents(),
+        loadAgenda(dashboardDate)
+      ]);
+    };
+
+    // ---------- KEGIATAN SEKOLAH: load, add, edit, delete ----------
+    const kegiatanBody = document.getElementById("kegiatanBody");
+    const btnTambah = document.getElementById("btnTambahKegiatan");
+    const kegiatanModal = document.getElementById("kegiatanModal");
+    const kegiatanModalTitle = document.getElementById("kegiatanModalTitle");
+    const kegiatanDate = document.getElementById("kegiatanDate");
+    const kegiatanText = document.getElementById("kegiatanText");
+    const kegiatanStatus = document.getElementById("kegiatanStatus");
+    const kegiatanNote = document.getElementById("kegiatanNote");
+    const kegiatanCancel = document.getElementById("kegiatanCancel");
+    const kegiatanSave = document.getElementById("kegiatanSave");
+
+    let editingId = null; // id baris (row id) saat edit
+
+    // Fungsi format tanggal konsisten yyyy-MM-dd
+    function formatTanggal(tgl) {
+      if (!tgl) return "";
+      const d = new Date(tgl);
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // Fungsi default tanggal sekarang untuk input tambah
+    function getDateGMT7() {
+      return formatTanggal(new Date());
+    }
+
+    // ================== MODAL TAMBAH ==================
+    btnTambah.onclick = () => {
+      editingId = null;
+      kegiatanModalTitle.textContent = "➕ Tambah Kegiatan";
+      kegiatanDate.value = getDateGMT7();
+      kegiatanDate.disabled = false;
+      kegiatanText.value = "";
+      kegiatanStatus.value = "Dalam Proses";
+      kegiatanNote.value = "";
+      kegiatanModal.style.display = "flex";
+      kegiatanModal.setAttribute("aria-hidden", "false");
+    };
+
+    // tutup modal
+    kegiatanCancel.onclick = () => {
+      kegiatanModal.style.display = "none";
+      kegiatanModal.setAttribute("aria-hidden", "true");
+    };
+
+    // ================== LOAD KEGIATAN ==================
+    async function loadKegiatanSekolah() {
+      kegiatanBody.innerHTML = `<tr><td colspan="5" class="center">Memuat...</td></tr>`;
+      try {
+        const data = await kegiatanGet({ action: "getkegiatan" });
+        if (!data || data.length === 0) {
+          kegiatanBody.innerHTML = `<tr><td colspan="5" class="center">Belum ada kegiatan</td></tr>`;
+          return;
+        }
+
+        // filter: hanya tampilkan item yang punya tanggal atau isi kegiatan
+        const validData = data.filter(item => (item.Tanggal && item.Tanggal.trim()) || (item.Isi && item.Isi.trim()));
+
+        if (validData.length === 0) {
+          kegiatanBody.innerHTML = `<tr><td colspan="5" class="center">Belum ada kegiatan</td></tr>`;
+          return;
+        }
+
+        // --- Fungsi pembantu untuk parse tanggal campuran ---
+        function parseTanggal(tglStr) {
+          if (!tglStr) return new Date(0); // fallback
+          tglStr = tglStr.trim();
+
+          // Coba format yyyy-MM-dd
+          let parts = tglStr.split("-");
+          if (parts.length === 3) {
+            if (parts[0].length === 4) { // yyyy-MM-dd
+              return new Date(parts[0], parseInt(parts[1]) - 1, parts[2]);
+            } else { // dd-MM-yyyy
+              return new Date(parts[2], parseInt(parts[1]) - 1, parts[0]);
+            }
+          }
+
+          // fallback ke Date biasa
+          const d = new Date(tglStr);
+          if (isNaN(d)) return new Date(0);
+          return d;
+        }
+
+        // --- Sort ascending berdasarkan tanggal
+        validData.sort((a, b) => {
+          const t1 = parseTanggal(a.Tanggal);
+          const t2 = parseTanggal(b.Tanggal);
+          return t1 - t2;
+        });
+
+        kegiatanBody.innerHTML = "";
+        validData.forEach(item => {
+          const tr = document.createElement("tr");
+          if (item.Status === "Selesai") tr.classList.add("kegiatan-selesai");
+          tr.dataset.rowId = item._id || "";
+
+          tr.innerHTML = `
+      <td class="center">${formatTanggal(item.Tanggal)}</td>
+      <td>${(item.Isi || item["Isi Kegiatan"] || "").replace(/\n/g, "<br>")}</td>
+      <td class="center">${item.Status || ""}</td>
+      <td>${item.Catatan || item.Note || ""}</td>
+      <td class="center">
+        <button class="icon-btn" title="Edit" data-id="${item._id || item.row}" data-action="edit">✏️</button>
+        <button class="icon-btn" title="Hapus" data-id="${item._id || item.row}" data-action="delete">🗑️</button>
+      </td>`;
+          kegiatanBody.appendChild(tr);
+        });
+      } catch (e) {
+        kegiatanBody.innerHTML = `<tr><td colspan="5" class="center">Gagal memuat: ${e.message}</td></tr>`;
+      }
+    }
+
+    // ================== EDIT / DELETE ==================
+    kegiatanBody.addEventListener("click", async (ev) => {
+      const btn = ev.target.closest("button");
+      if (!btn) return;
+      const id = btn.dataset.id;
+      const action = btn.dataset.action;
+
+      if (action === "edit") {
+        // Langsung buka popup tanpa jeda
+        editingId = id;
+        kegiatanModalTitle.textContent = "✏️ Edit Kegiatan";
+        kegiatanDate.disabled = true;
+        kegiatanDate.value = getDateGMT7();
+        kegiatanText.value = "";
+        kegiatanStatus.value = "Dalam Proses";
+        kegiatanNote.value = "";
+        kegiatanModal.style.display = "flex";
+        kegiatanModal.setAttribute("aria-hidden", "false");
+
+        // Setelah popup muncul, ambil data dan isi form
+        try {
+          const res = await kegiatanGet({ action: "getkegiatanbyid", id });
+          const item = Array.isArray(res) && res[0] ? res[0] : res;
+          if (item) {
+            kegiatanDate.value = item.Tanggal ? formatTanggal(item.Tanggal) : getDateGMT7();
+            kegiatanText.value = item.Isi || item["Isi Kegiatan"] || "";
+            kegiatanStatus.value = item.Status || "Dalam Proses";
+            kegiatanNote.value = item.Catatan || item.Note || "";
+          } else {
+            alert("Data tidak ditemukan.");
+          }
+        } catch (e) { alert("Gagal ambil data: " + e.message); }
+      }
+      else if (action === "delete") {
+        if (!confirm("Yakin ingin menghapus kegiatan ini?")) return;
+        try {
+          const del = await kegiatanPost("deletekegiatan", { id });
+          if (del && del.success) {
+            alert("Kegiatan dihapus.");
+            await loadKegiatanSekolah();
+          } else alert("Gagal menghapus kegiatan.");
+        } catch (e) { alert("Gagal menghapus: " + e.message); }
+      }
+      else if (action === "delete") {
+        if (!confirm("Yakin ingin menghapus kegiatan ini?")) return;
+        try {
+          const del = await kegiatanPost("deletekegiatan", { id });
+          if (del && del.success) {
+            alert("Kegiatan dihapus.");
+            await loadKegiatanSekolah();
+          } else alert("Gagal menghapus kegiatan.");
+        } catch (e) {
+          alert("Gagal menghapus: " + e.message);
+        }
+      }
+    });
+
+    // ================== SAVE / ADD / UPDATE ==================
+    kegiatanSave.onclick = async () => {
+      const tanggal = formatTanggal(kegiatanDate.value); // konsisten yyyy-MM-dd
+      const isi = kegiatanText.value.trim();
+      const status = kegiatanStatus.value;
+      const note = kegiatanNote.value.trim();
+      if (!tanggal || !isi) return alert("Tanggal dan isi kegiatan wajib diisi.");
+
+      const payload = { Tanggal: tanggal, Isi: isi, Status: status, Catatan: note };
+
+      // Simpan teks lama tombol, dan ubah ke 'Mengirim...'
+      const oldText = kegiatanSave.textContent;
+      kegiatanSave.disabled = true;
+      kegiatanSave.textContent = "Mengirim...";
+
+      try {
+        if (editingId) {
+          // update
+          payload.id = editingId;
+          const res = await kegiatanPost("updatekegiatan", payload);
+          if (res && res.success) {
+            alert("Kegiatan berhasil diperbarui.");
+            kegiatanModal.style.display = "none";
+            await loadKegiatanSekolah();
+          } else alert("Gagal memperbarui kegiatan.");
+        } else {
+          // tambahkan
+          const res = await kegiatanPost("addkegiatan", payload);
+          if (res && res.success) {
+            alert("Kegiatan berhasil ditambahkan.");
+            kegiatanModal.style.display = "none";
+            await loadKegiatanSekolah();
+          } else alert("Gagal menambahkan kegiatan.");
+        }
+      } catch (e) {
+        alert("Gagal menyimpan: " + e.message);
+      } finally {
+        // Kembalikan tombol ke keadaan semula
+        kegiatanSave.disabled = false;
+        kegiatanSave.textContent = oldText;
+      }
+    };
+
+    // ================== INISIALISASI MENU ==================
+    document.querySelector('.nav-item[data-page="kegiatan"]').onclick = async function () {
+      // tampilkan halaman kegiatan
+      Object.keys(pages).forEach(p => pages[p].style.display = (p === "kegiatan" ? "block" : "none"));
+      document.querySelectorAll(".nav-item[data-page]").forEach(x => x.classList.toggle("active", x === this));
+      await loadKegiatanSekolah();
+    };
+
+    // helper: tutup diluar halam
+    document.querySelectorAll(".modal").forEach(mod => {
+      mod.addEventListener("click", (ev) => {
+        if (ev.target === mod) mod.style.display = "none";
+      });
+    });
+  </script>
 </body>
+
 </html>
-
-
